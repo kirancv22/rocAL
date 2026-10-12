@@ -21,7 +21,9 @@ THE SOFTWARE.
 */
 #include "decoders/video/video_decoder_factory.h"
 
+#ifndef ROCAL_NO_SWSCALE
 #include "decoders/video/ffmpeg_video_decoder.h"
+#endif
 #include "decoders/video/rocdec_video_decoder.h"
 #include "decoders/video/video_decoder.h"
 
@@ -30,8 +32,13 @@ THE SOFTWARE.
 #ifdef ROCAL_VIDEO
 std::shared_ptr<VideoDecoder> create_video_decoder(DecoderConfig config) {
     switch (config.type()) {
+#ifndef ROCAL_NO_SWSCALE
         case DecoderType::FFMPEG_VIDEO:
             return std::make_shared<FFmpegVideoDecoder>();
+#else
+        case DecoderType::FFMPEG_VIDEO:
+            THROW("FFmpeg software decode is not built in this demux-only tree");
+#endif
 #if ENABLE_ROCDECODE
         case DecoderType::ROCDECODE_VIDEO:
             return std::make_shared<RocDecVideoDecoder>(config.get_hip_stream());

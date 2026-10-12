@@ -38,7 +38,9 @@ extern "C" {
 #include <libavutil/pixdesc.h>
 #include <libavutil/samplefmt.h>
 #include <libavutil/timestamp.h>
+#ifndef ROCAL_NO_SWSCALE
 #include <libswscale/swscale.h>
+#endif
 }
 #endif
 #include "parameters/parameter_factory.h"
